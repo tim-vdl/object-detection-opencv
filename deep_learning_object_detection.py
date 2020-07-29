@@ -7,6 +7,7 @@ import numpy as np
 import argparse
 import cv2
 import simpleaudio
+import pygame
 
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
@@ -39,11 +40,11 @@ net = cv2.dnn.readNetFromCaffe(args["prototxt"], args["model"])
 # image = cv2.imread(args["image"])
   
 # Prepare audo playback objet
-filename = 'audio/beep.wav'
-wave_obj = simpleaudio.WaveObject.from_wave_file(filename)
+pygame.mixer.init()
+pygame.mixer.music.load("./audio/beep.wav")
 
 # define a video capture object 
-vid = cv2.VideoCapture(0)
+vid = cv2.VideoCapture(-1)
 while(True): 
     # Capture the video frame 
     # by frame 
@@ -77,28 +78,29 @@ while(True):
 
             # display the prediction
             label = CLASSES[idx]
-            if label == 'person':
-                play_obj = wave_obj.play()
-                play_obj.wait_done() 
+            if label == 'person' or label == 'bird':
+                pygame.mixer.music.play()
+                while pygame.mixer.music.get_busy() == True:
+                    continue
             text = "{}: {:.2f}%".format(label, confidence * 100)
             print("[INFO] {}".format(text))
-            cv2.rectangle(image, (startX, startY), (endX, endY),
-                COLORS[idx], 2)
-            y = startY - 15 if startY - 15 > 15 else startY + 15
-            cv2.putText(image, text, (startX, y),
-                cv2.FONT_HERSHEY_SIMPLEX, 0.5, COLORS[idx], 2)
+            # cv2.rectangle(image, (startX, startY), (endX, endY),
+            #    COLORS[idx], 2)
+            # y = startY - 15 if startY - 15 > 15 else startY + 15
+            # cv2.putText(image, text, (startX, y),
+            #     cv2.FONT_HERSHEY_SIMPLEX, 0.5, COLORS[idx], 2)
 
     # show the output image
-    cv2.imshow("Output", image)
+    # cv2.imshow("Output", image)
     # The 'q' button is set as the 
     # quitting button you may use any 
     # desired button of your choice 
-    if cv2.waitKey(1) & 0xFF == ord('q'): 
-        break
+    # if cv2.waitKey(1) & 0xFF == ord('q'): 
+    #    break
 # After the loop release the cap object 
 vid.release() 
 # Destroy all the windows 
-cv2.destroyAllWindows() 
+# cv2.destroyAllWindows() 
 
 
 
