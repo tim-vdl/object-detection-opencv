@@ -68,7 +68,7 @@ def main(args):
 def parse_arguments():
     # construct the argument parse and parse the arguments
     ap = argparse.ArgumentParser()
-    ap.add_argument("-t", "--threshold", type=float, default=2.5git ,
+    ap.add_argument("-t", "--threshold", type=float, default=2.5 ,
         help="minimum threshold for norm between frames")
     args = ap.parse_args()
     return args
