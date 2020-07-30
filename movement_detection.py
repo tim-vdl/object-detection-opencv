@@ -38,7 +38,10 @@ def main(args):
     # define a video capture object 
     vid = cv2.VideoCapture(0)
     prev_image = None
-    while(True): 
+    detected = False
+    n_frames = 0
+    while(True):
+        n_frames += 1
         # Capture the video frame 
         # by frame 
         _, image = vid.read()
@@ -48,18 +51,18 @@ def main(args):
             n_m_per_pix = n_m/image.size
             n_0_per_pix = n_0*1.0/image.size
 
-            print(f"Manhattan norm: {n_m}, per pixel: {n_m_per_pix}")
-            print(f"Zero norm: {n_0}, per pixel: {n_0_per_pix}")
-
             prev_image = image
             if n_m_per_pix > args.threshold:
-                pygame.mixer.music.play()
-                while pygame.mixer.music.get_busy() == True:
-                    continue
-                print(f"[INFO] Object detected")
+                if n_frames > 20:
+                    if detected:
+                        pygame.mixer.music.play()
+                        while pygame.mixer.music.get_busy() == True:
+                            continue
+                        detected = False
+                    else:
+                        detected = True 
+                print(f"[INFO] Object detected: {n_m_per_pix}")
                 print()
-            else:
-                print('Nothing to see')
         else:
             prev_image = image
     # After the loop release the cap object 
