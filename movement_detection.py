@@ -3,6 +3,7 @@ import argparse
 import cv2
 import simpleaudio
 import pygame
+from datetime import datetime
 
 from scipy.linalg import norm
 from scipy import sum
@@ -49,9 +50,12 @@ def main(args):
         if prev_image is not None:
             n_m, n_0 = compare_images(image, prev_image)
             n_m_per_pix = n_m/image.size
-            n_0_per_pix = n_0*1.0/image.size
+            # n_0_per_pix = n_0*1.0/image.size
 
             prev_image = image
+
+            current_time = datetime.now().strftime("%H:%M:%S")
+
             if n_m_per_pix > args.threshold:
                 if n_frames > 20:
                     if detected:
@@ -61,8 +65,10 @@ def main(args):
                         detected = False
                     else:
                         detected = True 
-                print(f"[INFO] Object detected: {n_m_per_pix}")
-                print()
+                print(f"[INFO] {current_time} - Object detected: {n_m_per_pix}")
+
+            else:
+                print(f"[INFO] {current_time}")
         else:
             prev_image = image
     # After the loop release the cap object 
