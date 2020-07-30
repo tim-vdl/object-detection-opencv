@@ -33,7 +33,7 @@ def to_grayscale(arr):
 def main(args):
     # Prepare audo playback objet
     pygame.mixer.init()
-    pygame.mixer.music.load("./audio/beep.wav")
+    pygame.mixer.music.load("./audio/owl.wav")
 
     # define a video capture object 
     vid = cv2.VideoCapture(0)
